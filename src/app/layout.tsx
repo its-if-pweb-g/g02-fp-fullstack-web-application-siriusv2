@@ -32,7 +32,7 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <div className="bg-white sticky top-0 z-10 px-4">
+                <div className="shadow-md shadow-[#3872be] sticky top-0 z-10 bg-white">
                     <ResponsiveNavBar />
                 </div>
                 {children}
@@ -41,7 +41,7 @@ export default function RootLayout({
                         <h1 className="text-xs text-center sm:text-md md:text-lg text-black">
                             Copyright © 2024 SIRIUSv2
                         </h1>
-                    </div>
+                    </div>  
                 </footer>
             </body>
         </html>
