@@ -16,23 +16,23 @@
 
 @layer utilities {
   .text-balance {
-      text-wrap: balance;
+    text-wrap: balance;
   }
   .landing h1 {
-      font-weight: bolder;
-      color: white;
+    font-weight: bolder;
+    color: white;
   }
   .landing h2 {
-      font-weight: normal;
-      color: white;
+    font-weight: normal;
+    color: white;
   }
   .landing button {
-      color:white;
-      background-color: #004aad;
-      text-align: center;
+    color: white;
+    background-color: #004aad;
+    text-align: center;
   }
   .landing button:hover {
-      color:black;
-      background-color: #bde7ff;
+    color: black;
+    background-color: #bde7ff;
   }
 }
