@@ -11,7 +11,7 @@ export default function Page() {
             <div className="w-full bg-white rounded-lg mx-auto my-10 sm:max-w-md xl:p-0 border-2 border-gray-700">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <h1 className="text-2xl font-bold leading-tight tracking-tight text-black md:text-2xl">
-                        Sign in to your account
+                        Sign in to your Account
                     </h1>
                     <form className="space-y-4 md:space-y-6" action="#">
                         <div>
