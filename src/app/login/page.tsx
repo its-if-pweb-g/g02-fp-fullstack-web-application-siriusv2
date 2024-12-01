@@ -2,9 +2,34 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import {useRouter} from "next/navigation";
 
 export default function Page() {
     const [hide, setHide] = useState(false);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+    const router = useRouter();
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+          const response = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+    
+          if (response.ok) {
+            router.push("/");
+          } else {
+            const data = await response.json();
+            setError(data.message);
+          }
+        } catch (err) {
+          setError("Something went wrong!");
+        }
+      };
 
     return (
         <div className="flex flex-col bg-gradient-to-r from-[#3872be] to-[#bde7ff]">
@@ -13,7 +38,7 @@ export default function Page() {
                     <h1 className="text-2xl font-bold leading-tight tracking-tight text-black md:text-2xl">
                         Sign in to your account
                     </h1>
-                    <form className="space-y-4 md:space-y-6" action="#">
+                    <form className="space-y-4 md:space-y-6" action="#" onSubmit={handleLogin}>
                         <div>
                             <label
                                 htmlFor="email"
@@ -27,6 +52,8 @@ export default function Page() {
                                 id="email"
                                 className="bg-white border border-gray-300 text-black rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3"
                                 placeholder="example@company.com"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 required={true}
                             />
                         </div>
@@ -43,6 +70,8 @@ export default function Page() {
                                 id="password"
                                 placeholder="Your Password"
                                 className="bg-white border border-gray-300 text-black rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
                                 required={true}
                             />
                         </div>
@@ -54,7 +83,7 @@ export default function Page() {
                                         aria-describedby="hide"
                                         type="checkbox"
                                         className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                                        required={true}
+                                        required={false}
                                         onClick={() => {
                                             setHide(!hide);
                                         }}
