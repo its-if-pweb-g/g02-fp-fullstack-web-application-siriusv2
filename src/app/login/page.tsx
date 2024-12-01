@@ -67,7 +67,7 @@ export default function Page() {
                                     >
                                         {hide
                                             ? "Hide Password"
-                                            : "Unhide Password"}
+                                            : "Show Password"}
                                     </label>
                                 </div>
                             </div>
