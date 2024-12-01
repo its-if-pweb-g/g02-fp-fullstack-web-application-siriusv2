@@ -87,7 +87,7 @@ export default function ResponsiveNavBar() {
                             </Link>
                             <Link href="/blog" aria-current="page">
                                 <li className="text-black text-md md:text-xl md:my-2 md:ml-1 md:mr-1 rounded-md px-3 py-2 duration-300 hover:bg-[#0049AB] hover:text-white">
-                                    Blog
+                                    Blogs
                                 </li>
                             </Link>
                             <Link href="/about" aria-current="page">
