@@ -26,13 +26,12 @@ export default function Page() {
             });
             
             const res = await resRegister.json();
-            console.log(res.status);
 
             if(res.message === 'Email already registered'){
                 setError(res.message);
                 return;
             } else if(res.message === 'User registered'){
-                router.push("/");
+                router.push("/login");
             } else {
                 setError("User registration failed");
             }

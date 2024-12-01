@@ -2,29 +2,38 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
     const [hide, setHide] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try{
-            const resLogin = await fetch('/api/register', {
+            const resLogin = await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({ email: email, password: password }),
             });
+            
+            const res = await resLogin.json();
 
-            if(resLogin.ok) {
-
+            if(res.message === 'Invalid credentials'){
+                setError(res.message);
+                return;
+            } else if(res.message === 'Login success'){
+                router.push("/");
             } else {
-                console.log("User registration failed");
+                setError("User login failed");
             }
 
-        } catch (error) {console.log("User registration failed");}
+        } catch (err) {console.log(err);}
     }
 
     return (
@@ -88,6 +97,11 @@ export default function Page() {
                                 </div>
                             </div>
                         </div>
+                        { error &&
+                            <div className="flex flex-row items-center justify-center bg-red-500 rounded-md text-white">
+                                {error}
+                            </div>
+                        }
                         <div className="flex flex-row items-center justify-center">
                             <button
                                 type="submit"

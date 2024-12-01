@@ -17,7 +17,8 @@ export async function POST(req) {
       });
     });
 
-    const db = getDb()
+    const db = getDb();
+    
     if (await db.collection('user').findOne({email: email})) {
       return NextResponse.json({ message: 'Email already registered' }, {status: 400});
     }
