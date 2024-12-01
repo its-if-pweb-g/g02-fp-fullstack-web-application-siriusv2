@@ -96,7 +96,7 @@ export default function ResponsiveNavBar() {
                                 </li>
                             </Link>
                             <Link href="/login" aria-current="page">
-                                <li className="flex flex-row items-center md:justify-center text-black text-md md:text-xl md:my-2 md:ml-1 md:mr-0 rounded-md px-3 py-2 duration-300 hover:bg-[#0049AB] hover:text-white">
+                                <li className="flex flex-row items-center md:justify-center text-black text-md md:text-xl md:my-2 md:ml-1 md:mr-0 rounded-md px-3 py-2 border-[1.5px] border-gray-700 duration-300 hover:bg-[#0049AB] hover:text-white">
                                     <MdPeopleAlt className="mr-2" />
                                     Login
                                 </li>
