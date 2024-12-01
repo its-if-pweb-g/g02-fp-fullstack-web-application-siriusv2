@@ -34,7 +34,7 @@ export default function Page() {
             } else if(res.message === 'User registered'){
                 router.push("/");
             } else {
-                console.log("User registration failed");
+                setError("User registration failed");
             }
 
         } catch (err) {console.log(err);}
