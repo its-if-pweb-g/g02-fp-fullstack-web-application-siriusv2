@@ -29,7 +29,7 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <div className="bg-white sticky top-0 z-10 px-4">
+                <div className="bg-white sticky top-0 z-10 shadow-md shadow-[#3872be]">
                     <ResponsiveNavBar />
                 </div>
                 {children}

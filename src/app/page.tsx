@@ -16,7 +16,7 @@ export default function Home() {
         </a>
         <h2 className="text-4xl sm:text-5xl mx-5">The beginning of our Sirius v2 Project.</h2>
         <div className="flex flex-row flex-wrap justify-center">
-          <div className="shadow-xl outline outline-5 rounded-3xl sm:rounded-full outline-white m-7">
+          <div className="shadow-md shadow-[#004aad] outline outline-5 rounded-3xl sm:rounded-full outline-white m-7">
             <a href="about">
               <button className="text-xl sm:text-2xl rounded-full px-10 py-2.5 mx-10 my-5 shadow-lg duration-300">
                 About Us

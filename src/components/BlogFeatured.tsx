@@ -28,7 +28,7 @@ export default function BlogFeatured() {
                         nostrud exercitation ullamco laboris nisi ut aliquip ex
                         ea commodo consequat.
                     </p>
-                    <button className="transition duration-300 ease-in-out p-3 rounded-lg my-3">
+                    <button className="transition duration-300 ease-in-out p-3 rounded-lg my-3 shadow-lg">
                         Read more
                     </button>
                 </div>
