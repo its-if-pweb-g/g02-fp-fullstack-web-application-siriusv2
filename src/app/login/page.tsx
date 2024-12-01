@@ -2,34 +2,30 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
 
 export default function Page() {
     const [hide, setHide] = useState(false);
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        try {
-          const response = await fetch("/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
-          });
-    
-          if (response.ok) {
-            router.push("/");
-          } else {
-            const data = await response.json();
-            setError(data.message);
-          }
-        } catch (err) {
-          setError("Something went wrong!");
-        }
-      };
+
+        try{
+            const resLogin = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if(resLogin.ok) {
+
+            } else {
+                console.log("User registration failed");
+            }
+
+        } catch (error) {console.log("User registration failed");}
+    }
 
     return (
         <div className="flex flex-col bg-gradient-to-r from-[#3872be] to-[#bde7ff]">
@@ -48,12 +44,11 @@ export default function Page() {
                             </label>
                             <input
                                 type="email"
-                                name="email"
                                 id="email"
                                 className="bg-white border border-gray-300 text-black rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3"
-                                placeholder="example@company.com"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                placeholder="email@company.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 required={true}
                             />
                         </div>
@@ -66,7 +61,6 @@ export default function Page() {
                             </label>
                             <input
                                 type={hide ? "text" : "password"}
-                                name="password"
                                 id="password"
                                 placeholder="Your Password"
                                 className="bg-white border border-gray-300 text-black rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-3"
@@ -84,19 +78,12 @@ export default function Page() {
                                         type="checkbox"
                                         className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                                         required={false}
-                                        onClick={() => {
-                                            setHide(!hide);
-                                        }}
+                                        onClick={() => {setHide(!hide);}}
                                     />
                                 </div>
                                 <div className="ml-3 text-sm">
-                                    <label
-                                        htmlFor="hide"
-                                        className="text-black"
-                                    >
-                                        {hide
-                                            ? "Hide Password"
-                                            : "Show Password"}
+                                    <label htmlFor="hide" className="text-black">
+                                        {hide ? "Hide Password" : "Show Password"}
                                     </label>
                                 </div>
                             </div>
