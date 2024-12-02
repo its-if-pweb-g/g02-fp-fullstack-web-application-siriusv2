@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Category() {
   return (
-    <div className="md:mx-44 mb-10 mx-16">
+    <div className="md:mx-44 mx-16">
       <h1 className="text-xl font-semibold mb-7">Top Visited</h1>
       <div className="flex flex-wrap gap-4">
         <Link
