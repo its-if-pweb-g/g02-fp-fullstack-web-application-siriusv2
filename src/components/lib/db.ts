@@ -3,7 +3,7 @@ import { MongoClient, Db } from "mongodb";
 let db: Db | null = null;
 
 export const connectDb = (cb: (err?: Error | null) => void): void => {
-  MongoClient.connect("mongodb+srv://Sirius:Siriusv2@sirius.eypym.mongodb.net")
+  MongoClient.connect("mongodb+srv://Sirius:Siriusv2@sirius.eypym.mongodb.net/?retryWrites=true&w=majority&appName=Sirius")
     .then((client) => {
       db = client.db();
       cb(null);
