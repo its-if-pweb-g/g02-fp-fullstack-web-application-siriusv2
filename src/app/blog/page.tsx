@@ -1,5 +1,5 @@
-import BlogFeatured from "@/components/BlogFeatured";
-import Category from "@/components/Category";
+import BlogFeatured from "@/components/blog/BlogFeatured";
+import Category from "@/components/blog/Category";
 
 export default function Page() {
   return (
