@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 export async function POST(req: any) {
     try {
         const { email, password } = await req.json();
-        await new Promise((resolve: Function, reject) => {
+        await new Promise((resolve: Function, reject: Function) => {
             connectDb((err) => {
                 if (err) {
                     reject("Error connecting to the database");

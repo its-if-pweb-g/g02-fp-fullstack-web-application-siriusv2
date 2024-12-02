@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 export default function Page() {
     const [hide1, setHide1] = useState(false);
@@ -11,33 +13,55 @@ export default function Page() {
     const [username, setUsername] = useState("");
     const [pass, setPass] = useState("");
     const [conPass, setConPass] = useState("");
-    const [error, setError] = useState("");
 
     const router = useRouter();
+
+    // ! for sweetalert
+    const showSwalCreate = (status: boolean, mess: string) => {
+        return withReactContent(Swal)
+            .fire({
+                text: mess,
+                icon: status ? "success" : "error",
+                title: status ? "Success" : "Error",
+                confirmButtonText: "OK",
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                }
+            });
+    };
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try{
-            const resRegister = await fetch('/api/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: username, email: email, password: pass }),
+        try {
+            const resRegister = await fetch("/api/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: pass,
+                }),
             });
-            
+
             const res = await resRegister.json();
 
-            if(res.message === 'Email already registered'){
-                setError(res.message);
+            if (res.message === "Email already registered") {
+                // setError(res.message);
+                await showSwalCreate(false, res.message);
                 return;
-            } else if(res.message === 'User registered'){
+            } else if (res.message === "User registered") {
+                await showSwalCreate(true, res.message);
                 router.push("/login");
             } else {
-                setError("User registration failed");
+                // setError("User registration failed");
+                await showSwalCreate(false, "User registration failed");
             }
-
-        } catch (err) {console.log(err);}
-    }
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     const isMatch = pass == conPass || conPass == "";
 
@@ -48,7 +72,11 @@ export default function Page() {
                     <h1 className="text-2xl font-bold leading-tight tracking-tight text-black md:text-2xl">
                         Sign up an Account
                     </h1>
-                    <form className="space-y-4 md:space-y-6" action="#" onSubmit={handleRegister}>
+                    <form
+                        className="space-y-4 md:space-y-6"
+                        action="#"
+                        onSubmit={handleRegister}
+                    >
                         <div>
                             <label
                                 htmlFor="name"
@@ -188,11 +216,6 @@ export default function Page() {
                                 </div>
                             </div>
                         </div>
-                        { error &&
-                            <div className="flex flex-row items-center justify-center bg-red-500 rounded-md text-white">
-                                {error}
-                            </div>
-                        }
                         <div className="flex flex-row items-center justify-center">
                             <button
                                 type="submit"

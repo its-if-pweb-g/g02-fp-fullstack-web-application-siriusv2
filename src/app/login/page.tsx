@@ -3,38 +3,55 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 export default function Page() {
     const [hide, setHide] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
 
     const router = useRouter();
+
+    const showSwalCreate = (status: boolean, mess: string) => {
+        return withReactContent(Swal)
+            .fire({
+                text: mess,
+                icon: status ? "success" : "error",
+                title: status ? "Success" : "Error",
+                confirmButtonText: "OK",
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                }
+            });
+    };
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try{
-            const resLogin = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+        try {
+            const resLogin = await fetch("/api/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: email, password: password }),
             });
-            
+
             const res = await resLogin.json();
 
-            if(res.message === 'Invalid credentials'){
-                setError(res.message);
+            if (res.message === "Invalid credentials") {
+                await showSwalCreate(false, res.message);
                 return;
-            } else if(res.message === 'Login success'){
+            } else if (res.message === "Login success") {
+                await showSwalCreate(true, res.message);
                 router.push("/");
             } else {
-                setError("User login failed");
+                await showSwalCreate(false, "User login failed");
             }
-
-        } catch (err) {console.log(err);}
-    }
+        } catch (err) {
+            console.log(err);
+        }
+    };
 
     return (
         <div className="flex flex-col bg-gradient-to-r from-[#3872be] to-[#bde7ff]">
@@ -43,7 +60,11 @@ export default function Page() {
                     <h1 className="text-2xl font-bold leading-tight tracking-tight text-black md:text-2xl">
                         Sign in to your Account
                     </h1>
-                    <form className="space-y-4 md:space-y-6" action="#" onSubmit={handleLogin}>
+                    <form
+                        className="space-y-4 md:space-y-6"
+                        action="#"
+                        onSubmit={handleLogin}
+                    >
                         <div>
                             <label
                                 htmlFor="email"
@@ -87,21 +108,23 @@ export default function Page() {
                                         type="checkbox"
                                         className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                                         required={false}
-                                        onClick={() => {setHide(!hide);}}
+                                        onClick={() => {
+                                            setHide(!hide);
+                                        }}
                                     />
                                 </div>
                                 <div className="ml-3 text-sm">
-                                    <label htmlFor="hide" className="text-black">
-                                        {hide ? "Hide Password" : "Show Password"}
+                                    <label
+                                        htmlFor="hide"
+                                        className="text-black"
+                                    >
+                                        {hide
+                                            ? "Hide Password"
+                                            : "Show Password"}
                                     </label>
                                 </div>
                             </div>
                         </div>
-                        { error &&
-                            <div className="flex flex-row items-center justify-center bg-red-500 rounded-md text-white">
-                                {error}
-                            </div>
-                        }
                         <div className="flex flex-row items-center justify-center">
                             <button
                                 type="submit"

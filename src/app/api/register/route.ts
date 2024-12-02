@@ -7,7 +7,7 @@ export async function POST(req: any) {
         const { username, email, password } = await req.json();
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await new Promise((resolve: Function, reject) => {
+        await new Promise((resolve: Function, reject: Function) => {
             connectDb((err) => {
                 if (err) {
                     reject("Error connecting to the database");
