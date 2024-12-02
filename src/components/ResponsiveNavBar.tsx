@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { MdPeopleAlt } from "react-icons/md";
 
 export default function ResponsiveNavBar() {

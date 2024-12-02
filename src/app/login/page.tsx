@@ -11,6 +11,8 @@ export default function Page() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    const [login, setLogin] = useState(true);
+
     const router = useRouter();
 
     const showSwalCreate = (status: boolean, mess: string) => {
@@ -44,6 +46,7 @@ export default function Page() {
                 return;
             } else if (res.message === "Login success") {
                 await showSwalCreate(true, res.message);
+                setLogin(!login);
                 router.push("/");
             } else {
                 await showSwalCreate(false, "User login failed");
