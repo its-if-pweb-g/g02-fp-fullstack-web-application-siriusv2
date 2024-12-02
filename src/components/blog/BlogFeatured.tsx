@@ -3,17 +3,33 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 export default function BlogFeatured() {
   const router = useRouter();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const showSwalCreate = (status: boolean, mess: string) => {
+    return withReactContent(Swal)
+      .fire({
+        text: mess,
+        icon: status ? "success" : "error",
+        title: status ? "Success" : "Error",
+        confirmButtonText: "OK",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+        }
+      });
+  };
 
   const handleCreateClick = () => {
-    if (isLoggedIn) {
-      router.push("/create-post");
-    } else {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      showSwalCreate(false, "You need to login first!");
       router.push("/login");
+    } else {
+      router.push("/create-post");
     }
   };
 

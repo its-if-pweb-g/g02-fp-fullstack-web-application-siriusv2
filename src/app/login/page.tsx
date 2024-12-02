@@ -46,6 +46,7 @@ export default function Page() {
                 await showSwalCreate(false, res.message);
                 return;
             } else if (res.message === "Login success") {
+                localStorage.setItem("token", res.token);
                 await showSwalCreate(true, res.message);
                 setLogin(!login);
                 router.push("/");
