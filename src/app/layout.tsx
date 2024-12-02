@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import ResponsiveNavBar from "@/components/ResponsiveNavBar";
+import LoginProvider from "@/components/provider/LoginProvider";
 
 const geistSans = localFont({
     src: "./fonts/GeistVF.woff",
@@ -32,17 +33,19 @@ export default function RootLayout({
             <body
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
-                <div className="bg-white sticky top-0 z-10 shadow-md shadow-[#3872be]">
-                    <ResponsiveNavBar />
-                </div>
-                {children}
-                <footer className="flex items-center justify-center z-10 bg-white">
-                    <div className="my-5">
-                        <h1 className="text-xs text-center sm:text-md md:text-lg text-black">
-                            Copyright © 2024 SIRIUSv2
-                        </h1>
+                <LoginProvider>
+                    <div className="bg-white sticky top-0 z-10 shadow-md shadow-[#3872be]">
+                        <ResponsiveNavBar />
                     </div>
-                </footer>
+                    {children}
+                    <footer className="flex items-center justify-center z-10 bg-white">
+                        <div className="my-5">
+                            <h1 className="text-xs text-center sm:text-md md:text-lg text-black">
+                                Copyright © 2024 SIRIUSv2
+                            </h1>
+                        </div>
+                    </footer>
+                </LoginProvider>
             </body>
         </html>
     );

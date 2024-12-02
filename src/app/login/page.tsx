@@ -1,17 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import LoginContext from "@/components/context/LoginContext";
 
 export default function Page() {
     const [hide, setHide] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const [login, setLogin] = useState(true);
+    const { login, setLogin } = useContext(LoginContext);
 
     const router = useRouter();
 

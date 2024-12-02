@@ -4,10 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect, useContext } from "react";
 import { MdPeopleAlt } from "react-icons/md";
+import LoginContext from "./context/LoginContext";
 
 export default function ResponsiveNavBar() {
     const [dropDown, setDropDown] = useState(false);
     const [isMd, setIsMd] = useState(false);
+
+    const { login, setLogin } = useContext(LoginContext);
 
     useEffect(() => {
         const mediaQuery = window.matchMedia("(min-width: 768px)");
@@ -96,10 +99,18 @@ export default function ResponsiveNavBar() {
                                 </li>
                             </Link>
                             {/* this button can be Login and Logout */}
-                            <Link href="/login" aria-current="page">
+                            <Link
+                                href={login ? "/login" : "/"}
+                                aria-current="page"
+                                onClick={() => {
+                                    if (!login) {
+                                        setLogin(!login);
+                                    }
+                                }}
+                            >
                                 <li className="flex flex-row items-center md:justify-center text-black text-md md:text-xl md:my-2 md:ml-1 md:mr-0 rounded-md px-3 py-2 border-[1.5px] border-gray-700 duration-300 hover:bg-[#0049AB] hover:text-white">
                                     <MdPeopleAlt className="mr-2" />
-                                    Login
+                                    {login ? "Log in" : "Log out"}
                                 </li>
                             </Link>
                         </ul>
