@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import Cookies from "js-cookie";
 
 export default function BlogFeatured() {
   const router = useRouter();
@@ -24,7 +25,7 @@ export default function BlogFeatured() {
   };
 
   const handleCreateClick = () => {
-    const token = localStorage.getItem("token");
+    const token = Cookies.get("token");
     if (!token) {
       showSwalCreate(false, "You need to login first!");
       router.push("/login");
