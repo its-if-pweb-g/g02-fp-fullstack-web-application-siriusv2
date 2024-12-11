@@ -2,7 +2,7 @@ import { Int32 } from "mongodb";
 import {fetchComments} from "../lib/comment";
 import HTMLReactParser from "html-react-parser/lib/index";
 
-export default async function Comments({id} : {id: Int32}) {
+export default async function Comments({id} : {id: number}) {
   try {
     // Fetch the comments for the provided id (e.g., blog post ID)
     const comments = await fetchComments(id);
