@@ -50,10 +50,12 @@ export default function BlogFeatured() {
 
   const handleBlogClick = (blog: Blog) => {
     setSelectedBlog(blog); // Simpan blog yang dipilih
+    router.push(`?blog=${encodeURIComponent(blog.title)}`); // Update query
   };
 
   const handleBackClick = () => {
     setSelectedBlog(null); // Kembali ke daftar blog
+    router.push("/blog"); // Reset query
   };
 
   // Fungsi untuk mengonversi HTML ke teks menggunakan DOMParser
