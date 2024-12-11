@@ -26,11 +26,6 @@
     font-weight: normal;
     color: white;
   }
-  .landing button {
-    color: white;
-    background-color: #004aad;
-    text-align: center;
-  }
   .landing button:hover {
     color: black;
     background-color: #bde7ff;
