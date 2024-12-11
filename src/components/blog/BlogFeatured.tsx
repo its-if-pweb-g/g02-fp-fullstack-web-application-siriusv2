@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter, usePathname  } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Cookies from "js-cookie";
@@ -18,61 +18,59 @@ interface Blog {
 }
 
 export default function BlogFeatured() {
-  const [blogs, setBlogs] = useState<Blog[]>([]); // State dengan tipe Blog[]
-  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null); // State untuk blog yang dipilih
-  const [authAdmin, setAdmin] = useState(false);
-  const router = useRouter();
+    const [blogs, setBlogs] = useState<Blog[]>([]); // State dengan tipe Blog[]
+    const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null); // State untuk blog yang dipilih
+    const [authAdmin, setAdmin] = useState(false);
+    const router = useRouter();
 
-  const showSwalCreate = (status: boolean, mess: string) => {
-    return withReactContent(Swal)
-      .fire({
-        text: mess,
-        icon: status ? "success" : "error",
-        title: status ? "Success" : "Error",
-        confirmButtonText: "OK",
-      })
-      .then((result) => {
-        if (result.isConfirmed) {
-        }
-      });
-  };
-
-        const fetchBlogs = async () => {
-          try {
-              const response = await fetch("/api/blog");
-              const data: { blogs: Blog[] } = await response.json(); // Tipe untuk data yang diterima
-              setBlogs(data.blogs);
-          } catch (error) {
-              console.error("Error fetching blogs:", error);
-          }
-      };
-
-      useEffect(() => {
-      const adminCheck = async () => {
-      const token = Cookies.get("token");
-      if (token) {
-        try {
-          const resAdmin = await fetch("/api/check-admin", {});
-          const res = await resAdmin.json();
-  
-          if (res.message === "Authenticated") {
-            setAdmin(true);
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      }
+    const showSwalCreate = (status: boolean, mess: string) => {
+        return withReactContent(Swal)
+            .fire({
+                text: mess,
+                icon: status ? "success" : "error",
+                title: status ? "Success" : "Error",
+                confirmButtonText: "OK",
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                }
+            });
     };
 
-    adminCheck();
-    fetchBlogs();
+    const fetchBlogs = async () => {
+        try {
+            const response = await fetch("/api/blog");
+            const data: { blogs: Blog[] } = await response.json(); // Tipe untuk data yang diterima
+            setBlogs(data.blogs);
+        } catch (error) {
+            console.error("Error fetching blogs:", error);
+        }
+    };
+
+    useEffect(() => {
+        const adminCheck = async () => {
+            const token = Cookies.get("token");
+            if (token) {
+                try {
+                    const resAdmin = await fetch("/api/check-admin", {});
+                    const res = await resAdmin.json();
+
+                    if (res.message === "Authenticated") {
+                        setAdmin(true);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        };
+
+        adminCheck();
+        fetchBlogs();
     }, []);
 
     const handleBlogClick = (blog: Blog) => {
         setSelectedBlog(blog); // Simpan blog yang dipilih
-        router.push(
-            `?blog=${encodeURIComponent(blog.title.replace("_", " "))}`
-        ); // Update query
+        router.push(`?blog=${encodeURIComponent(blog.title)}`); // Update query
     };
 
     const handleBackClick = () => {
@@ -96,54 +94,57 @@ export default function BlogFeatured() {
                 const resAdmin = await fetch("/api/check-admin", {});
                 const res = await resAdmin.json();
 
-        if (res.message === "Unauthorized") {
-          await showSwalCreate(false, res.message);
-          return;
-        } else if (res.message === "Authenticated") {
-          await showSwalCreate(true, res.message);
-          router.push("/create-post");
-        } else {
-          await showSwalCreate(false, "Error during authentication check");
+                if (res.message === "Unauthorized") {
+                    await showSwalCreate(false, res.message);
+                    return;
+                } else if (res.message === "Authenticated") {
+                    await showSwalCreate(true, res.message);
+                    router.push("/create-post");
+                } else {
+                    await showSwalCreate(
+                        false,
+                        "Error during authentication check"
+                    );
+                }
+            } catch (err) {
+                console.log(err);
+            }
         }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
+    };
 
-  const handleDeleteBlog = async () => {
-    const title = selectedBlog?.title;
-    if (!title) {
-      await showSwalCreate(false, "Blog doesn't exist");
-    } else {
-      try {
-        const resDelete = await fetch("/api/blog", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({title}),
-        });
-
-        const res = await resDelete.json();
-
-        if (res.message === "Blog Deleted") {
-          await showSwalCreate(true, res.message);
-          setSelectedBlog(null);
-          const pathname = usePathname(); // Get current path
-          if (pathname === "/blog") {
-            fetchBlogs();
-          } else {
-            router.push("/blog");
-          }
+    const handleDeleteBlog = async () => {
+        const title = selectedBlog?.title;
+        if (!title) {
+            await showSwalCreate(false, "Blog doesn't exist");
         } else {
-          await showSwalCreate(false, "Error during blog deletion");
+            try {
+                const resDelete = await fetch("/api/blog", {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ title }),
+                });
+
+                const res = await resDelete.json();
+
+                if (res.message === "Blog Deleted") {
+                    await showSwalCreate(true, res.message);
+                    setSelectedBlog(null);
+                    const pathname = usePathname(); // Get current path
+                    if (pathname === "/blog") {
+                        fetchBlogs();
+                    } else {
+                        router.push("/blog");
+                    }
+                } else {
+                    await showSwalCreate(false, "Error during blog deletion");
+                }
+            } catch (err) {
+                console.log(err);
+            }
         }
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
+    };
 
     return (
         <div className="mx-16 lg:mx-44 items-center mb-10">

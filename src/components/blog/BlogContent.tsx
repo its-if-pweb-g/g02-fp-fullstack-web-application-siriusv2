@@ -11,9 +11,9 @@ export default function BlogPost({
         <div>
             <div>
                 <div>
-                    <h1>{title}</h1>
+                    <h1 className="text-xl">{title}</h1>
                 </div>
-                <div>{HTMLParser(content)}</div>
+                <div className="prose">{HTMLParser(content)}</div>
             </div>
         </div>
     );
