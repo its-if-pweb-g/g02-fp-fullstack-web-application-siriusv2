@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Cookies from "js-cookie";
@@ -153,6 +153,14 @@ export default function BlogFeatured() {
                     >
                         Back to Blogs
                     </button>
+                    {authAdmin ? (
+                    <button
+                        onClick={handleDeleteBlog}
+                        className="mt-5 bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-700"
+                    >
+                        Delete this Blog
+                    </button>
+                    ):("")}
 
                     <Comments title={selectedBlog.title.replace("_", " ")} />
                 </div>
