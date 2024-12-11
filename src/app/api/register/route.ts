@@ -26,12 +26,23 @@ export async function POST(req: any) {
             );
         }
 
-        await db.collection("user").insertOne({
-            username: username,
-            email: email,
-            password: hashedPassword,
-            created_at: new Date(Date.now()).toISOString().split(".")[0] + "Z",
-        });
+        if(username === "Carolus Nathanell" || username === "Sayyid Daffa ' Al Mubarok" || username === "Kevin Leonard Berutu"){
+            await db.collection("user").insertOne({
+                username: username,
+                email: email,
+                password: hashedPassword,
+                created_at: new Date(Date.now()).toISOString().split(".")[0] + "Z",
+                role: "admin",
+            });
+        } else {
+            await db.collection("user").insertOne({
+                username: username,
+                email: email,
+                password: hashedPassword,
+                created_at: new Date(Date.now()).toISOString().split(".")[0] + "Z",
+                role: "user",
+            });
+        }
 
         return NextResponse.json(
             { message: "User registered" },
