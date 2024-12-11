@@ -24,13 +24,35 @@ export default function BlogFeatured() {
       });
   };
 
-  const handleCreateClick = () => {
+  const handleCreateClick = async () => {
     const token = Cookies.get("token");
     if (!token) {
       showSwalCreate(false, "You need to login first!");
       router.push("/login");
     } else {
-      router.push("/create-post");
+      try {
+        const resAdmin = await fetch("/api/check-admin", {
+          method: "GET",
+          headers:{
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+  
+        const res = await resAdmin.json();
+  
+        if (res.message === "Unauthorized") {
+          await showSwalCreate(false, res.message);
+          return;
+        } else if (res.message === "Authenticated") {
+          await showSwalCreate(true, res.message);
+          router.push("/create-post");
+        } else {
+          await showSwalCreate(false, "Error during authentication check");
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
