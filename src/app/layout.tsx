@@ -34,11 +34,11 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <LoginProvider>
-                    <div className="bg-white sticky top-0 z-10 shadow-md shadow-[#3872be]">
+                    <div className="bg-white sticky top-0 z-100 shadow-md shadow-[#3872be]">
                         <ResponsiveNavBar />
                     </div>
                     {children}
-                    <footer className="flex items-center justify-center z-10 bg-white">
+                    <footer className="flex items-center justify-center z-100 bg-white">
                         <div className="my-5">
                             <h1 className="text-xs text-center sm:text-md md:text-lg text-black">
                                 Copyright © 2024 SIRIUSv2

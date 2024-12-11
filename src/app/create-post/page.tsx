@@ -98,6 +98,8 @@ export default function RichTextEditor() {
                 setTitle(""); // Reset title
                 setContent(""); // Reset content
                 setDesc("");
+
+                router.push("/blog");
             } else {
                 const errorData = await response.json();
                 await showSwalCreate(
