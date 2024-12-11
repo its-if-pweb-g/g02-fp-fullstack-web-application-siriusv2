@@ -1,8 +1,6 @@
-import { Int32 } from "mongodb";
-import { connectDb, getDb } from "./db"; // Your database utility to get the database instance
+import { connectDb, getDb } from "./db";
 
-// Fetch comments for a blog post
-export async function fetchComments(id: number) {
+export async function fetchComments(blog_title: string) {
     try {
         await new Promise((resolve: Function, reject: Function) => {
             connectDb((err) => {
@@ -15,10 +13,9 @@ export async function fetchComments(id: number) {
         });
         const db = getDb();
 
-        // Fetch the comments from MongoDB, sorting by date and limiting the results
         const comments = await db
             .collection('comments')
-            .find({ id: id })
+            .find({ blog_title: blog_title })
             .sort({ createdAt: -1 })
             .toArray();
 
@@ -28,4 +25,38 @@ export async function fetchComments(id: number) {
         console.error("Error fetching comments:", error);
         throw new Error("Failed to fetch comments");
     }
+}
+
+export async function addComment(id: number, username: string, comment: string) {
+  try {
+    await new Promise((resolve: Function, reject: Function) => {
+      connectDb((err) => {
+        if (err) {
+          reject("Error connecting to the database");
+        } else {
+          resolve();
+        }
+      });
+    });
+
+    const db = getDb();
+
+    const newComment = {
+      id,
+      username,
+      comment,
+      created_at: new Date(Date.now()).toISOString().split(".")[0] + "Z",
+    };
+
+    const result = await db.collection('comments').insertOne(newComment);
+
+    if (result.insertedId) {
+      return { success: true, comment: newComment };
+    } else {
+      throw new Error('Failed to insert comment');
+    }
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    throw new Error("Failed to add comment");
+  }
 }

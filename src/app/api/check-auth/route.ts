@@ -17,9 +17,10 @@ export async function GET(req: NextRequest) {
         { status: 401 }
       );
     }
-
+    const username = decoded.username;
+    
     return NextResponse.json(
-      { message: "Authenticated", user: decoded },
+      { message: "Authenticated", user: decoded,  username: username },
       { status: 200 }
     );
   } catch (error) {
