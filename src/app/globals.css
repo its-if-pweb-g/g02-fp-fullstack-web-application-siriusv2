@@ -35,4 +35,13 @@
     color: black;
     background-color: #bde7ff;
   }
+  .landing username {
+    font-size: xx-large;
+  }
+  .landing date {
+    font-size: medium;
+  }
+  .landing content {
+    font-size: x-large
+  }
 }
