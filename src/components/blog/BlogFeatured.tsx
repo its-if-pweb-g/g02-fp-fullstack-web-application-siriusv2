@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname  } from "next/navigation";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Cookies from "js-cookie";
@@ -18,6 +18,7 @@ interface Blog {
 export default function BlogFeatured() {
   const [blogs, setBlogs] = useState<Blog[]>([]); // State dengan tipe Blog[]
   const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null); // State untuk blog yang dipilih
+  const [authAdmin, setAdmin] = useState(false);
   const router = useRouter();
 
   const showSwalCreate = (status: boolean, mess: string) => {
@@ -34,17 +35,34 @@ export default function BlogFeatured() {
       });
   };
 
+  const fetchBlogs = async () => {
+    try {
+      const response = await fetch("/api/blog");
+      const data: { blogs: Blog[] } = await response.json(); // Tipe untuk data yang diterima
+      setBlogs(data.blogs);
+    } catch (error) {
+      console.error("Error fetching blogs:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchBlogs = async () => {
-      try {
-        const response = await fetch("/api/blog");
-        const data: { blogs: Blog[] } = await response.json(); // Tipe untuk data yang diterima
-        setBlogs(data.blogs);
-      } catch (error) {
-        console.error("Error fetching blogs:", error);
+    const adminCheck = async () => {
+      const token = Cookies.get("token");
+      if (token) {
+        try {
+          const resAdmin = await fetch("/api/check-admin", {});
+          const res = await resAdmin.json();
+  
+          if (res.message === "Authenticated") {
+            setAdmin(true);
+          }
+        } catch (err) {
+          console.log(err);
+        }
       }
     };
 
+    adminCheck();
     fetchBlogs();
   }, []);
 
@@ -82,6 +100,40 @@ export default function BlogFeatured() {
           router.push("/create-post");
         } else {
           await showSwalCreate(false, "Error during authentication check");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const handleDeleteBlog = async () => {
+    const title = selectedBlog?.title;
+    if (!title) {
+      await showSwalCreate(false, "Blog doesn't exist");
+    } else {
+      try {
+        const resDelete = await fetch("/api/blog", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({title}),
+        });
+
+        const res = await resDelete.json();
+
+        if (res.message === "Blog Deleted") {
+          await showSwalCreate(true, res.message);
+          setSelectedBlog(null);
+          const pathname = usePathname(); // Get current path
+          if (pathname === "/blog") {
+            fetchBlogs();
+          } else {
+            router.push("/blog");
+          }
+        } else {
+          await showSwalCreate(false, "Error during blog deletion");
         }
       } catch (err) {
         console.log(err);
@@ -139,6 +191,13 @@ export default function BlogFeatured() {
           >
             Back to Blogs
           </button>
+          {authAdmin ? (<button
+            onClick={handleDeleteBlog}
+            className="mt-5 bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-700"
+          >
+            Delete this Blog
+          </button>
+          ) : ("")}
         </div>
       ) : (
         // Tampilkan Daftar Blog

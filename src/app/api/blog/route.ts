@@ -61,3 +61,29 @@ export async function POST(req: Request) {
     );
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const request = await req.json();
+    const title = request.title;
+
+    await connectDatabase();
+    const db = getDb();
+    
+    const result = await db.collection("blogs").findOneAndDelete({ title });
+    await db.collection("comments").deleteMany({ blog_title: title });
+
+    if (!result) {
+      return NextResponse.json(
+        { message: "Blog not found or already deleted" },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json({ message: "Blog Deleted" }, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: error || "Error deleting blog" },
+      { status: 500 }
+    );
+  }
+}
