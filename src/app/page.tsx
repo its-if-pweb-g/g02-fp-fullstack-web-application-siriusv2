@@ -4,7 +4,9 @@ export default function Home() {
     return (
         <div className="landing bg-gradient-to-r from-[#3872be] to-[#bde7ff] py-64">
             <div className="flex-col justify-center text-center">
-                <h1 className="text-5xl sm:text-6xl md:text-7xl">Welcome!</h1>
+                <h1 className="text-5xl font-bold sm:text-6xl md:text-7xl">
+                    Welcome!
+                </h1>
                 <a href="/" className="flex justify-center">
                     <img
                         src={"/logo.png"}

@@ -10,6 +10,7 @@ import BlogPost from "./BlogContent";
 import Comments from "./Comments";
 import { MdDelete } from "react-icons/md";
 import { IoIosCreate } from "react-icons/io";
+import { IoReturnUpBackOutline } from "react-icons/io5";
 
 interface Blog {
     _id: string;
@@ -19,8 +20,8 @@ interface Blog {
 }
 
 export default function BlogFeatured() {
-    const [blogs, setBlogs] = useState<Blog[]>([]); // State dengan tipe Blog[]
-    const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null); // State untuk blog yang dipilih
+    const [blogs, setBlogs] = useState<Blog[]>([]);
+    const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
     const [authAdmin, setAdmin] = useState(false);
     const router = useRouter();
 
@@ -41,7 +42,7 @@ export default function BlogFeatured() {
     const fetchBlogs = async () => {
         try {
             const response = await fetch("/api/blog");
-            const data: { blogs: Blog[] } = await response.json(); // Tipe untuk data yang diterima
+            const data: { blogs: Blog[] } = await response.json();
             setBlogs(data.blogs);
         } catch (error) {
             console.error("Error fetching blogs:", error);
@@ -171,8 +172,9 @@ export default function BlogFeatured() {
                     <div className="flex gap-5">
                         <button
                             onClick={handleBackClick}
-                            className="mt-5 bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-700"
+                            className="mt-5 bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-700 flex items-center gap-2"
                         >
+                            <IoReturnUpBackOutline />
                             Back to Blogs
                         </button>
                         {authAdmin ? (
@@ -196,13 +198,14 @@ export default function BlogFeatured() {
             ) : (
                 <div className="">
                     <div className="bg-white p-7 rounded-md border-[1.7px] border-gray-800">
-                        <h1 className="md:text-5xl pb-10 text-2xl font-bold">
-                            This is the Sirius project V2. Stay tuned!!
+                        <h1 className="md:text-4xl pb-10 text-2xl font-bold">
+                            Welcome to the Sirius Project V2 – Stay Tuned for
+                            Exciting Updates!
                         </h1>
                         <div className="md:flex md:gap-5 md:items-center md:justify-center">
                             <div className="w-1/2">
                                 <Image
-                                    src={"/blog/contoh.jpeg"}
+                                    src={"/blog/front-display.jpg"}
                                     alt="contoh"
                                     width={450}
                                     height={500}
@@ -211,45 +214,66 @@ export default function BlogFeatured() {
                             </div>
                             <div className="md:w-1/2 w-full">
                                 <h1 className="font-bold lg:text-2xl mb-4 text-xl">
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit
+                                    The Future of Technology: How We're Shaping
+                                    Tomorrow
                                 </h1>
                                 <p>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipisicing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua.
+                                    The Sirius Project V2 is evolving! We're
+                                    committed to delivering innovative solutions
+                                    and engaging content. Our team is working
+                                    hard to bring you exciting new features.
+                                    Stay tuned for more!
                                 </p>
                                 <div className="flex gap-3 my-3">
-                                    <button
-                                        onClick={handleCreateClick}
-                                        className="flex justify-center items-center transition duration-300 ease-in-out p-3 rounded-lg shadow-lg border-[1.5px] border-blue-400 bg-blue-500 text-white hover:bg-blue-700"
-                                    >
-                                        <IoIosCreate />
-                                        <h1 className="ml-3">Create Post</h1>
-                                    </button>
+                                    {authAdmin ? (
+                                        <button
+                                            onClick={handleCreateClick}
+                                            className="flex justify-center items-center transition duration-300 ease-in-out p-3 rounded-lg shadow-lg border-[1.5px] border-blue-400 bg-blue-500 text-white hover:bg-blue-700"
+                                        >
+                                            <IoIosCreate />
+                                            <h1 className="ml-3">
+                                                Create Post
+                                            </h1>
+                                        </button>
+                                    ) : (
+                                        <></>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <h2 className="text-3xl font-bold my-5">Recent Blogs</h2>
-                    <div className="flex flex-wrap justify-center items-center">
-                        {blogs.map((blog) => (
-                            <div
-                                key={blog._id}
-                                className="bg-white w-[300px] shadow-md p-5 rounded-lg cursor-pointer hover:shadow-lg m-2 border-[1.5px] border-gray-800"
-                                onClick={() => {
-                                    handleBlogClick(blog);
-                                }} // Klik untuk melihat detail blog
-                            >
-                                <h3 className="text-xl font-bold">
-                                    {blog.title.replace("_", " ")}
-                                </h3>
-                                <p className="text-gray-600 text-xs">
-                                    {blog.description}
-                                </p>
+                    {blogs.length > 0 ? (
+                        <>
+                            <h2 className="text-3xl font-bold my-5">
+                                Recent Blogs
+                            </h2>
+                            <div className="flex flex-wrap justify-center items-center">
+                                {blogs.map((blog) => (
+                                    <div
+                                        key={blog._id}
+                                        className="bg-white w-[300px] shadow-md p-5 rounded-lg cursor-pointer hover:shadow-lg m-2 border-[1.5px] border-gray-800"
+                                        onClick={() => {
+                                            handleBlogClick(blog);
+                                        }}
+                                    >
+                                        <h3 className="text-xl font-bold">
+                                            {blog.title.replace("_", " ")}
+                                        </h3>
+                                        <p className="text-gray-600 text-xs">
+                                            {blog.description.length > 50
+                                                ? `${blog.description.slice(
+                                                      0,
+                                                      150
+                                                  )}...`
+                                                : blog.description}
+                                        </p>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             )}
         </div>
