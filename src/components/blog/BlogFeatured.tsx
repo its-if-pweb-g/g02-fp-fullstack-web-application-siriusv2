@@ -1,13 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import Cookies from "js-cookie";
 
+// Tipe data Blog
+interface Blog {
+  _id: string;
+  title: string;
+  description: string;
+  content: string;
+}
+
 export default function BlogFeatured() {
+  const [blogs, setBlogs] = useState<Blog[]>([]); // State dengan tipe Blog[]
+  const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null); // State untuk blog yang dipilih
   const router = useRouter();
 
   const showSwalCreate = (status: boolean, mess: string) => {
@@ -24,6 +34,34 @@ export default function BlogFeatured() {
       });
   };
 
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await fetch("/api/blog");
+        const data: { blogs: Blog[] } = await response.json(); // Tipe untuk data yang diterima
+        setBlogs(data.blogs);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  const handleBlogClick = (blog: Blog) => {
+    setSelectedBlog(blog); // Simpan blog yang dipilih
+  };
+
+  const handleBackClick = () => {
+    setSelectedBlog(null); // Kembali ke daftar blog
+  };
+
+  // Fungsi untuk mengonversi HTML ke teks menggunakan DOMParser
+  const convertHtmlToText = (html: string) => {
+    const doc = new DOMParser().parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+  };
+
   const handleCreateClick = async () => {
     const token = Cookies.get("token");
     if (!token) {
@@ -32,9 +70,8 @@ export default function BlogFeatured() {
     } else {
       try {
         const resAdmin = await fetch("/api/check-admin", {});
-  
         const res = await resAdmin.json();
-  
+
         if (res.message === "Unauthorized") {
           await showSwalCreate(false, res.message);
           return;
@@ -86,6 +123,39 @@ export default function BlogFeatured() {
           </div>
         </div>
       </div>
+
+      {/* Tampilkan Blog yang Dipilih */}
+      {selectedBlog ? (
+        <div className="mt-10">
+          <h2 className="text-3xl font-bold mb-5">{selectedBlog.title}</h2>
+          <p className="text-gray-600 mb-3">{selectedBlog.description}</p>
+          <p className="mt-3">{convertHtmlToText(selectedBlog.content)}</p>{" "}
+          {/* Mengonversi konten HTML menjadi teks */}
+          <button
+            onClick={handleBackClick}
+            className="mt-5 bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-700"
+          >
+            Back to Blogs
+          </button>
+        </div>
+      ) : (
+        // Tampilkan Daftar Blog
+        <div className="mt-10">
+          <h2 className="text-3xl font-bold mb-5">Recent Blogs</h2>
+          <div className="grid gap-5">
+            {blogs.map((blog) => (
+              <div
+                key={blog._id}
+                className="bg-white shadow-md p-5 rounded-lg cursor-pointer hover:shadow-lg"
+                onClick={() => handleBlogClick(blog)} // Klik untuk melihat detail blog
+              >
+                <h3 className="text-xl font-bold">{blog.title}</h3>
+                <p className="text-gray-600">{blog.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

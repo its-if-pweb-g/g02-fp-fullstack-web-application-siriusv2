@@ -79,7 +79,7 @@ export default function RichTextEditor() {
     }
 
     try {
-      const response = await fetch("/api/blogs", {
+      const response = await fetch("/api/blog", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
