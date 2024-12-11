@@ -161,14 +161,12 @@ export default function BlogFeatured() {
 
     return (
         <div className="mx-16 lg:mx-44 items-center py-14">
-            {/* Tampilkan Blog yang Dipilih */}
             {selectedBlog ? (
                 <div className="bg-white p-6 rounded-md">
                     <BlogPost
                         title={selectedBlog.title.replace("_", " ")}
                         content={selectedBlog.content}
                     />
-                    {/* Mengonversi konten HTML menjadi teks */}
 
                     <div className="flex gap-5">
                         <button
@@ -196,50 +194,49 @@ export default function BlogFeatured() {
                     </div>
                 </div>
             ) : (
-                // Tampilkan Daftar Blog
                 <div className="">
-                    <h1 className="md:text-5xl py-10 text-2xl font-bold">
-                        This is the Sirius project V2. Stay tuned!!
-                    </h1>
-                    <div className="md:flex md:gap-5 md:items-center md:justify-center">
-                        <div className="w-1/2">
-                            <Image
-                                src={"/blog/contoh.jpeg"}
-                                alt="contoh"
-                                width={450}
-                                height={500}
-                                className="rounded-lg hidden md:block"
-                            />
-                        </div>
-                        <div className="md:w-1/2 w-full">
-                            <h1 className="font-bold lg:text-2xl mb-4 text-xl">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit
-                            </h1>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua.
-                            </p>
-                            <div className="flex gap-3 my-3">
-                                <button className="transition duration-300 ease-in-out p-3 rounded-lg shadow-lg">
-                                    Read more
-                                </button>
-                                <button
-                                    onClick={handleCreateClick}
-                                    className="transition duration-300 ease-in-out p-3 rounded-lg shadow-lg bg-blue-500 text-white hover:bg-blue-700"
-                                >
-                                    Create Post
-                                </button>
+                    <div className="bg-white p-7 rounded-md border-[1.7px] border-gray-800">
+                        <h1 className="md:text-5xl pb-10 text-2xl font-bold">
+                            This is the Sirius project V2. Stay tuned!!
+                        </h1>
+                        <div className="md:flex md:gap-5 md:items-center md:justify-center">
+                            <div className="w-1/2">
+                                <Image
+                                    src={"/blog/contoh.jpeg"}
+                                    alt="contoh"
+                                    width={450}
+                                    height={500}
+                                    className="rounded-lg hidden md:block"
+                                />
+                            </div>
+                            <div className="md:w-1/2 w-full">
+                                <h1 className="font-bold lg:text-2xl mb-4 text-xl">
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit
+                                </h1>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit, sed do eiusmod tempor
+                                    incididunt ut labore et dolore magna aliqua.
+                                </p>
+                                <div className="flex gap-3 my-3">
+                                    <button
+                                        onClick={handleCreateClick}
+                                        className="flex justify-center items-center transition duration-300 ease-in-out p-3 rounded-lg shadow-lg border-[1.5px] border-blue-400 bg-blue-500 text-white hover:bg-blue-700"
+                                    >
+                                        <IoIosCreate />
+                                        <h1 className="ml-3">Create Post</h1>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <h2 className="text-3xl font-bold mb-5">Recent Blogs</h2>
-                    <div className="grid gap-5">
+                    <h2 className="text-3xl font-bold my-5">Recent Blogs</h2>
+                    <div className="flex flex-wrap justify-center items-center">
                         {blogs.map((blog) => (
                             <div
                                 key={blog._id}
-                                className="bg-white shadow-md p-5 rounded-lg cursor-pointer hover:shadow-lg"
+                                className="bg-white w-[300px] shadow-md p-5 rounded-lg cursor-pointer hover:shadow-lg m-2 border-[1.5px] border-gray-800"
                                 onClick={() => {
                                     handleBlogClick(blog);
                                 }} // Klik untuk melihat detail blog
@@ -247,7 +244,7 @@ export default function BlogFeatured() {
                                 <h3 className="text-xl font-bold">
                                     {blog.title.replace("_", " ")}
                                 </h3>
-                                <p className="text-gray-600">
+                                <p className="text-gray-600 text-xs">
                                     {blog.description}
                                 </p>
                             </div>

@@ -18,10 +18,6 @@
     .text-balance {
         text-wrap: balance;
     }
-    .landing h1 {
-        font-weight: bolder;
-        color: black;
-    }
 
     .landing button:hover {
         color: black;
