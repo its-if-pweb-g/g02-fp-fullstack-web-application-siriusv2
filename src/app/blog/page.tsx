@@ -1,5 +1,5 @@
+"use client";
 import BlogFeatured from "@/components/blog/BlogFeatured";
-import Comment from "../../components/blog/Comments";
 
 export default function Page() {
     return (

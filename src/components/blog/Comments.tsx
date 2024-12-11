@@ -27,7 +27,7 @@ export default function Comments({ title }: { title: string }) {
                 }
 
                 // Fetch comments
-                const commentsData = await fetchComments(title);
+                const commentsData = await fetchComments(blog_title);
                 setComments(commentsData);
             } catch (err) {
                 console.error("Error loading data:", err);
@@ -36,7 +36,7 @@ export default function Comments({ title }: { title: string }) {
         };
 
         fetchInitialData();
-    }, [title]);
+    }, [blog_title]);
 
     // Add a comment
     const handleAddComment = async (e: React.FormEvent) => {
@@ -44,9 +44,9 @@ export default function Comments({ title }: { title: string }) {
         if (!newComment.trim()) return;
 
         try {
-            await addComment(title, username, newComment);
+            await addComment(blog_title, username, newComment);
             // Refresh comments
-            const updatedComments = await fetchComments(title);
+            const updatedComments = await fetchComments(blog_title);
             setComments(updatedComments);
             setNewComment("");
         } catch (err) {
