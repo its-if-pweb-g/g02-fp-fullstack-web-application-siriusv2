@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Comment from "../components/blog/Comments"
 
 export default function Home() {
   return (
@@ -30,7 +29,6 @@ export default function Home() {
             </a>
           </div>
         </div>
-          <Comment id={1} />
       </div>
     </div>
   );
