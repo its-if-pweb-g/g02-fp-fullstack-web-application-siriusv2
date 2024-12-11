@@ -4,14 +4,8 @@ import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
-    const authHeader = req.headers.get("Authorization");
+    const token = req.cookies.get("token")?.value;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ message: "Unauthorized" }), { status: 401 });
-    }
-
-    const token = authHeader.split(" ")[1];
-    
     if (!token) {
       return NextResponse.json({ message: "No token found" }, { status: 401 });
     }
