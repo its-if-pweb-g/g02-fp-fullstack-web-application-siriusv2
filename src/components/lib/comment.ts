@@ -2,7 +2,7 @@ import { Int32 } from "mongodb";
 import { connectDb, getDb } from "./db"; // Your database utility to get the database instance
 
 // Fetch comments for a blog post
-export async function fetchComments(id: Int32) {
+export async function fetchComments(id: number) {
     try {
         await new Promise((resolve: Function, reject: Function) => {
             connectDb((err) => {

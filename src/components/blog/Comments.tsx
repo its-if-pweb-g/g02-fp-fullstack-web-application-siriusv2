@@ -1,7 +1,8 @@
 import { Int32 } from "mongodb";
 import {fetchComments} from "../lib/comment";
+import HTMLReactParser from "html-react-parser/lib/index";
 
-export default async function Comments({id} : {id: Int32}) {
+export default async function Comments({id} : {id: number}) {
   try {
     // Fetch the comments for the provided id (e.g., blog post ID)
     const comments = await fetchComments(id);
@@ -12,18 +13,18 @@ export default async function Comments({id} : {id: Int32}) {
     // Iterate over the fetched comments and generate HTML
     comments.forEach((comment) => {
       html += `
-        <comment>
-          <username>${comment.username}</username><br/>
-          <date>${new Date(comment.createdAt).toLocaleString()}</date><br/>
-          <content>${comment.comment}</content>
-        </comment>
+        <div className="comment">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl">${comment.username}</h1>
+          <h3 className="text-xl sm:text-2xl" >${new Date(comment.createdAt).toLocaleString()}</h3>
+          <p>${comment.comment}</p>
+        </div>
       `;
     });
     
     return (
       <div>
         <h1 className="text-5xl sm:text-6xl md:text-7xl">Temporary, will be moved to Comments</h1>
-        <div className="commentContainer" dangerouslySetInnerHTML={{ __html: html }} />
+        {HTMLReactParser(html)}
       </div>
     );
 
