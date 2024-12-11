@@ -31,13 +31,7 @@ export default function BlogFeatured() {
       router.push("/login");
     } else {
       try {
-        const resAdmin = await fetch("/api/check-admin", {
-          method: "GET",
-          headers:{
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-          },
-        });
+        const resAdmin = await fetch("/api/check-admin", {});
   
         const res = await resAdmin.json();
   
