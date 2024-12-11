@@ -37,7 +37,7 @@ export default function BlogFeatured() {
       });
   };
 
-        const fetchBlogs = async () => {
+      const fetchBlogs = async () => {
           try {
               const response = await fetch("/api/blog");
               const data: { blogs: Blog[] } = await response.json(); // Tipe untuk data yang diterima
@@ -48,25 +48,25 @@ export default function BlogFeatured() {
       };
 
       useEffect(() => {
-      const adminCheck = async () => {
-      const token = Cookies.get("token");
-      if (token) {
-        try {
-          const resAdmin = await fetch("/api/check-admin", {});
-          const res = await resAdmin.json();
-  
-          if (res.message === "Authenticated") {
-            setAdmin(true);
+        const adminCheck = async () => {
+          const token = Cookies.get("token");
+          if (token) {
+            try {
+              const resAdmin = await fetch("/api/check-admin", {});
+              const res = await resAdmin.json();
+      
+              if (res.message === "Authenticated") {
+                setAdmin(true);
+              }
+            } catch (err) {
+              console.log(err);
+            }
           }
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    };
+        };
 
-    adminCheck();
-    fetchBlogs();
-    }, []);
+        adminCheck();
+        fetchBlogs();
+      }, []);
 
     const handleBlogClick = (blog: Blog) => {
         setSelectedBlog(blog); // Simpan blog yang dipilih
@@ -130,12 +130,9 @@ export default function BlogFeatured() {
         if (res.message === "Blog Deleted") {
           await showSwalCreate(true, res.message);
           setSelectedBlog(null);
-          const pathname = usePathname(); // Get current path
-          if (pathname === "/blog") {
-            fetchBlogs();
-          } else {
-            router.push("/blog");
-          }
+          
+          await fetchBlogs();
+          router.push("/blog");
         } else {
           await showSwalCreate(false, "Error during blog deletion");
         }
@@ -161,7 +158,14 @@ export default function BlogFeatured() {
                     >
                         Back to Blogs
                     </button>
-                    
+                    {authAdmin ? (
+                      <button
+                          onClick={handleDeleteBlog}
+                          className="mt-5 bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-700"
+                      >
+                          Delete This Blog
+                      </button>
+                    ) : ("")}
                     <Comments title={selectedBlog.title.replace("_", " ")} />
                 </div>
             ) : (
