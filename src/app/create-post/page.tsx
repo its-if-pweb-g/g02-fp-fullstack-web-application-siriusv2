@@ -17,6 +17,7 @@ export default function RichTextEditor() {
     const [desc, setDesc] = useState("");
     const router = useRouter();
 
+    // Memoized configuration for Jodit
     const config = useMemo(
         () => ({
             readonly: false,
@@ -63,9 +64,11 @@ export default function RichTextEditor() {
             });
     };
 
+    // Form submission handler
     const handleSubmit = async (e: any) => {
         e.preventDefault();
 
+        // Basic validation
         if (!title.trim()) {
             await showSwalCreate(false, "Please enter a title");
             return;
@@ -92,11 +95,9 @@ export default function RichTextEditor() {
             if (response.ok) {
                 const data = await response.json();
                 await showSwalCreate(true, "Blogs posted successfully");
-                setTitle("");
-                setContent("");
+                setTitle(""); // Reset title
+                setContent(""); // Reset content
                 setDesc("");
-
-                router.push("/blog");
             } else {
                 const errorData = await response.json();
                 await showSwalCreate(
