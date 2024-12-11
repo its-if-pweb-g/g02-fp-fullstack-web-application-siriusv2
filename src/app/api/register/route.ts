@@ -26,7 +26,7 @@ export async function POST(req: any) {
             );
         }
 
-        if(username === "Carolus Nathanell" || username === "Sayyid Daffa ' Al Mubarok" || username === "Kevin Leonard Berutu"){
+        if(email === "c.nathanell05@gmail.com" || email === "daffa1mubarok@gmail.com" || email === "kl905577@gmail.com"){
             await db.collection("user").insertOne({
                 username: username,
                 email: email,
