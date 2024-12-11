@@ -37,15 +37,19 @@ Vercel tidak berhasil (konflik dependensi npm)
 - NextJS sebagai framework web
 - TypeScript sebagai bahasa pemograman
 - Tailwind CSS sebagai framework styling
-- Cookies sebagai penyimpanan token session
+- js-cookies sebagai penyimpanan token session
 - jsonwebtoken sebagai pemeriksaan session
 - mongodb sebagai database
 - Jodit sebagai text editor
 
 ## Cara menjalankan aplikasi
 
+`npm run dev` dan mengunjungi `localhost:3000` pada browser
+
 ## Progress pembuatan dan pembagian tugas per anggota
+
+Semua dikerjakan bersama-sama, tidak ada yang menjadi beban maupun mengcarry
 
 ## Dokumentasi website
 
-`masukkan gambar dari website yang dibuat`
+
