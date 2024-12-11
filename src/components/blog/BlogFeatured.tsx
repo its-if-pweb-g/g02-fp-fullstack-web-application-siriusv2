@@ -8,6 +8,7 @@ import withReactContent from "sweetalert2-react-content";
 import Cookies from "js-cookie";
 import BlogPost from "./BlogContent";
 import Comments from "./Comments";
+import { MdDelete } from "react-icons/md";
 import { IoIosCreate } from "react-icons/io";
 
 interface Blog {
@@ -17,35 +18,56 @@ interface Blog {
     content: string;
 }
 
-const showSwalCreate = (status: boolean, mess: string) => {
-    return withReactContent(Swal)
-        .fire({
-            text: mess,
-            icon: status ? "success" : "error",
-            title: status ? "Success" : "Error",
-            confirmButtonText: "OK",
-        })
-        .then((result) => {
-            if (result.isConfirmed) {
-            }
-        });
-};
-
 export default function BlogFeatured() {
-    const [blogs, setBlogs] = useState<Blog[]>([]);
-    const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null);
+    const [blogs, setBlogs] = useState<Blog[]>([]); // State dengan tipe Blog[]
+    const [selectedBlog, setSelectedBlog] = useState<Blog | null>(null); // State untuk blog yang dipilih
     const [authAdmin, setAdmin] = useState(false);
     const router = useRouter();
+
+    const showSwalCreate = (status: boolean, mess: string) => {
+        return withReactContent(Swal)
+            .fire({
+                text: mess,
+                icon: status ? "success" : "error",
+                title: status ? "Success" : "Error",
+                confirmButtonText: "OK",
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                }
+            });
+    };
 
     const fetchBlogs = async () => {
         try {
             const response = await fetch("/api/blog");
-            const data: { blogs: Blog[] } = await response.json();
+            const data: { blogs: Blog[] } = await response.json(); // Tipe untuk data yang diterima
             setBlogs(data.blogs);
         } catch (error) {
             console.error("Error fetching blogs:", error);
         }
     };
+
+    useEffect(() => {
+        const adminCheck = async () => {
+            const token = Cookies.get("token");
+            if (token) {
+                try {
+                    const resAdmin = await fetch("/api/check-admin", {});
+                    const res = await resAdmin.json();
+
+                    if (res.message === "Authenticated") {
+                        setAdmin(true);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+        };
+
+        adminCheck();
+        fetchBlogs();
+    }, []);
 
     const handleBlogClick = (blog: Blog) => {
         setSelectedBlog(blog);
@@ -138,87 +160,94 @@ export default function BlogFeatured() {
     }, []);
 
     return (
-        <div className="mx-16 lg:mx-44 items-center">
+        <div className="mx-16 lg:mx-44 items-center py-14">
+            {/* Tampilkan Blog yang Dipilih */}
             {selectedBlog ? (
-                <div className="">
+                <div className="bg-white p-6 rounded-md">
                     <BlogPost
                         title={selectedBlog.title.replace("_", " ")}
                         content={selectedBlog.content}
                     />
                     {/* Mengonversi konten HTML menjadi teks */}
-                    <button
-                        onClick={handleBackClick}
-                        className="mt-5 bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-700"
-                    >
-                        Back to Blogs
-                    </button>
-                    {authAdmin ? (
+
+                    <div className="flex gap-5">
                         <button
-                            onClick={handleDeleteBlog}
+                            onClick={handleBackClick}
                             className="mt-5 bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-700"
                         >
-                            Delete this Blog
+                            Back to Blogs
                         </button>
-                    ) : (
-                        ""
-                    )}
-
-                    <Comments title={selectedBlog.title.replace("_", " ")} />
+                        {authAdmin ? (
+                            <button
+                                onClick={handleDeleteBlog}
+                                className="mt-5 bg-red-500 text-white p-3 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                            >
+                                <MdDelete />
+                                Delete this Blog
+                            </button>
+                        ) : (
+                            ""
+                        )}
+                    </div>
+                    <div className="mt-16">
+                        <Comments
+                            title={selectedBlog.title.replace("_", " ")}
+                        />
+                    </div>
                 </div>
             ) : (
-                <div className="pt-5">
-                    <div className="bg-white p-7 rounded-xl border-[1.5px] border-gray-800">
-                        <h1 className="pb-10 text-2xl font-bold md:text-5xl text-gray-800">
-                            This is the Sirius project V2. Stay tuned!!
-                        </h1>
-                        <div className="md:flex md:gap-5 md:items-center md:justify-center">
-                            <div className="w-1/2">
-                                <Image
-                                    src={"/blog/contoh.jpeg"}
-                                    alt="contoh"
-                                    width={450}
-                                    height={500}
-                                    className="rounded-lg hidden md:block"
-                                />
-                            </div>
-                            <div className="md:w-1/2 w-full">
-                                <h1 className="font-bold lg:text-2xl mb-4 text-xl">
-                                    Exploring New Horizons: What's Next for
-                                    Sirius?
-                                </h1>
-                                <p>
-                                    The Sirius Project V2 is evolving! We're
-                                    committed to delivering innovative solutions
-                                    and engaging content. Our team is working
-                                    hard to bring you exciting new features.
-                                    Stay tuned for more!
-                                </p>
-                                <div className="flex gap-3 my-3">
-                                    <button
-                                        onClick={handleCreateClick}
-                                        className="flex flex-row justify-center items-center transition duration-300 ease-in-out p-3 rounded-lg shadow-lg bg-blue-500 hover:bg-blue-700 hover:text-black"
-                                    >
-                                        <IoIosCreate className="mr-2" />
-                                        <h2 className="">Create Post</h2>
-                                    </button>
-                                </div>
+                // Tampilkan Daftar Blog
+                <div className="">
+                    <h1 className="md:text-5xl py-10 text-2xl font-bold">
+                        This is the Sirius project V2. Stay tuned!!
+                    </h1>
+                    <div className="md:flex md:gap-5 md:items-center md:justify-center">
+                        <div className="w-1/2">
+                            <Image
+                                src={"/blog/contoh.jpeg"}
+                                alt="contoh"
+                                width={450}
+                                height={500}
+                                className="rounded-lg hidden md:block"
+                            />
+                        </div>
+                        <div className="md:w-1/2 w-full">
+                            <h1 className="font-bold lg:text-2xl mb-4 text-xl">
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipisicing elit
+                            </h1>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipisicing elit, sed do eiusmod tempor
+                                incididunt ut labore et dolore magna aliqua.
+                            </p>
+                            <div className="flex gap-3 my-3">
+                                <button className="transition duration-300 ease-in-out p-3 rounded-lg shadow-lg">
+                                    Read more
+                                </button>
+                                <button
+                                    onClick={handleCreateClick}
+                                    className="transition duration-300 ease-in-out p-3 rounded-lg shadow-lg bg-blue-500 text-white hover:bg-blue-700"
+                                >
+                                    Create Post
+                                </button>
                             </div>
                         </div>
                     </div>
-                    <h2 className="text-3xl font-bold my-5">Recent Blogs</h2>
-                    <div className="flex flex-wrap justify-center items-center">
+                    <h2 className="text-3xl font-bold mb-5">Recent Blogs</h2>
+                    <div className="grid gap-5">
                         {blogs.map((blog) => (
                             <div
                                 key={blog._id}
-                                className="bg-white shadow-md p-5 m-3 rounded-lg w-[300px] h-[100px] cursor-pointer hover:shadow-lg border-[1.5px] border-gray-800"
+                                className="bg-white shadow-md p-5 rounded-lg cursor-pointer hover:shadow-lg"
                                 onClick={() => {
                                     handleBlogClick(blog);
                                 }} // Klik untuk melihat detail blog
                             >
-                                <h3 className="font-bold text-xl">
+                                <h3 className="text-xl font-bold">
                                     {blog.title.replace("_", " ")}
                                 </h3>
-                                <p className="text-gray-600 text-xs">
+                                <p className="text-gray-600">
                                     {blog.description}
                                 </p>
                             </div>

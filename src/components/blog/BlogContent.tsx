@@ -1,20 +1,22 @@
 import HTMLParser from "html-react-parser";
 
 export default function BlogPost({
-    title,
-    content,
+  title,
+  content,
 }: {
-    title: string;
-    content: string;
+  title: string;
+  content: string;
 }) {
-    return (
+  return (
+    <div>
+      <div>
         <div>
-            <div>
-                <div>
-                    <h1 className="text-xl">{title}</h1>
-                </div>
-                <div className="prose">{HTMLParser(content)}</div>
-            </div>
+          <p className="text-5xl font-bold pt-10 text-center">{title}</p>
         </div>
-    );
+        <div className="prose max-w-none mt-12 text-black">
+          {HTMLParser(content)}
+        </div>
+      </div>
+    </div>
+  );
 }

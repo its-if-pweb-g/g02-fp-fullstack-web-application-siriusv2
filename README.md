@@ -14,16 +14,42 @@
 
 ## Aplikasi Web yang dibuat
 
+#### Sebuah Blog Web
+
 ### Fitur yang dibuat
+
+- Dapat menambahkan akun
+- Email tertentu mendapat role `admin`
+- Email lainnya mendapat role `user`
+- Semua dapat membaca blog
+- Setiap blog memiliki bagian komentar
+- `user` dan `admin` dapat menambah komentar
+- `admin` dapat menambah dan menghapus post blog
+- Penambahan blog menggunakan text editor yang memiliki fitur relatif lengkap
+
 
 ### Link Deployment (jika ada)
 
+Vercel tidak berhasil (konflik dependensi npm)
+
 ## Teknologi yang digunakan
+
+- NextJS sebagai framework web
+- TypeScript sebagai bahasa pemograman
+- Tailwind CSS sebagai framework styling
+- js-cookies sebagai penyimpanan token session
+- jsonwebtoken sebagai pemeriksaan session
+- mongodb sebagai database
+- Jodit sebagai text editor
 
 ## Cara menjalankan aplikasi
 
+`npm run dev` dan mengunjungi `localhost:3000` pada browser
+
 ## Progress pembuatan dan pembagian tugas per anggota
+
+Semua dikerjakan bersama-sama, tidak ada yang menjadi beban maupun mengcarry
 
 ## Dokumentasi website
 
-`masukkan gambar dari website yang dibuat`
+
